@@ -4,14 +4,13 @@ import os
 nama_file = "data_mahasiswa.txt"
 
 # =================================================================
-# Latihan 1: Membuat fungsi Load Data (Membaca file ke Dictionary)
+# 1. Fungsi Load Data (Membaca file ke Dictionary)
 # =================================================================
 def baca_data_mahasiswa(nama_file):
     data_dict = {}
     
-    # Cek apakah file ada untuk menghindari error
+    # Cek file ada atau tidak
     if not os.path.exists(nama_file):
-        # Jika tidak ada, buat file kosong
         open(nama_file, "w").close()
         return data_dict
 
@@ -31,7 +30,7 @@ def baca_data_mahasiswa(nama_file):
     return data_dict
 
 # =================================================================
-# Fungsi Bantu: Menampilkan Data (Tabel)
+# 2. Fungsi Menampilkan Data
 # =================================================================
 def tampilkan_data(data_dict):
     print("\n=== Daftar Mahasiswa ===")
@@ -46,7 +45,7 @@ def tampilkan_data(data_dict):
     print("-" * 35)
 
 # =================================================================
-# Latihan 3: Membuat fungsi Mencari Data
+# 3. Fungsi Mencari Data
 # =================================================================
 def cari_data(data_dict):
     print("\n=== Pencarian Data ===")
@@ -61,7 +60,7 @@ def cari_data(data_dict):
         print("Data tidak ditemukan")
 
 # =================================================================
-# Latihan 4 (Bagian 2): Fungsi Menyimpan Data ke File
+# 4. Fungsi Menyimpan Data ke File
 # =================================================================
 def simpan_data(nama_file, data_dict):
     try:
@@ -74,9 +73,9 @@ def simpan_data(nama_file, data_dict):
         print(f"Gagal menyimpan data: {e}")
 
 # =================================================================
-# Latihan 5: Fungsi Update Nilai (Hanya di Memori/Dictionary)
+# 5. Fungsi Update Nilai (FIX: Auto-Save ke File)
 # =================================================================
-def update_nilai(data_dict):
+def update_nilai(data_dict, nama_file):  # <--- Ditambahkan parameter nama_file
     print("\n=== Update Nilai Mahasiswa ===")
     nim_update = input("Masukkan NIM mahasiswa yang akan diupdate nilainya: ").strip()
     
@@ -95,19 +94,22 @@ def update_nilai(data_dict):
         return
 
     nilai_lama = data_dict[nim_update]["nilai"]
+    
+    # Update di Memori (Dictionary)
     data_dict[nim_update]["nilai"] = nilai_baru
-
     print(f"Update Berhasil. Nilai {nim_update} berubah dari {nilai_lama} menjadi {nilai_baru}")
-4    print("(Catatan: Jangan lupa pilih menu 'Simpan data ke file' agar perubahan tersimpan permanen)")
+    
+    # === AUTO SAVE (LANGSUNG SIMPAN) ===
+    # Memanggil fungsi simpan_data agar perubahan langsung masuk ke file txt
+    simpan_data(nama_file, data_dict) 
 
 # =================================================================
 # MAIN PROGRAM (MENU LOOP)
 # =================================================================
 
-# 1. Load data saat program baru mulai
+# Load data saat program mulai
 buka_data = baca_data_mahasiswa(nama_file)
 
-# 2. Jalankan Menu Loop
 while True:
     print("\n=== MENU DATA MAHASISWA ===")
     print("1. Tampilkan semua data")
@@ -125,13 +127,14 @@ while True:
         cari_data(buka_data)
     
     elif pilihan == "3":
-        update_nilai(buka_data)
+        # FIX: Kirimkan nama_file agar bisa disimpan otomatis di dalam fungsi
+        update_nilai(buka_data, nama_file) 
     
     elif pilihan == "4":
         simpan_data(nama_file, buka_data)
     
     elif pilihan == "0":
-        print("Terima kasih! Keluar dari program.")
+        print("Terima kasih! Keluar dari pr1ogram.")
         break
     
     else:
