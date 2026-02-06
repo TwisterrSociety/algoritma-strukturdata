@@ -1,3 +1,0 @@
-BRG001,Roti,20
-BRG002,AirMineral,15
-BRG003,TehBotol,10
